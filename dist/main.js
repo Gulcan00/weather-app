@@ -1,0 +1,1 @@
+(()=>{WEATHER_API_KEY="514393f917194c5789a112205232112",GIPHY_API_KEY="UYttXGZ5FsNnFbHuMlCHb8YTjrIx80zN";const o=`https://api.weatherapi.com/v1/forecast.json?q=London&days=3&key=${WEATHER_API_KEY}`;fetch(o).then((o=>console.log(o)))})();
