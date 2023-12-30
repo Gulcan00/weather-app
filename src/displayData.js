@@ -1,6 +1,7 @@
 import { getWeather } from "./fetchData";
 
 function displayLocation({ country, localtime, name }) {
+  const container = document.getElementById("container");
   const div = document.createElement("div");
   div.classList.add("location");
 
@@ -8,9 +9,27 @@ function displayLocation({ country, localtime, name }) {
   location.innerText = `${name}, ${country}`;
   div.appendChild(location);
 
+  const form = document.createElement("form");
+  form.id = "weather-location";
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const newLocation = formData.get("location");
+    const weatherData = await getWeather(newLocation);
+    if (weatherData) {
+      container.innerHTML = null;
+      const { location: locationData, current, forecast } = weatherData;
+      container.appendChild(displayLocation(locationData));
+      container.appendChild(displayCurrentWeather(current));
+    }
+  });
+  const input = document.createElement("input");
+  input.name = "location";
+  form.appendChild(input);
   const button = document.createElement("button");
   button.innerText = "Change location";
-  const input = document.createElement("input");
+  form.appendChild(button);
+  div.appendChild(form);
 
   const dateObj = new Date(localtime);
   const date = document.createElement("p");
