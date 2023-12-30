@@ -20,3 +20,7 @@ body {
 .location {
   background-color: var(--jet);
 }
+
+.current {
+  background-color: var(--black-olive);
+}
