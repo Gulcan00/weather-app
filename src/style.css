@@ -1,0 +1,22 @@
+:root {
+  --jet: #2d2d2aff;
+  --black-olive: #353831ff;
+  --black-olive-2: #38423bff;
+  --feldgrau: #3f5e5aff;
+  --spring-green: #20fc8fff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.location {
+  background-color: var(--jet);
+}
