@@ -118,6 +118,15 @@ function displayLocation({ country, localtime, name }) {
 
   const form = document.createElement("form");
   form.id = "weather-location";
+  const input = document.createElement("input");
+  input.name = "location";
+  form.appendChild(input);
+  const span = document.createElement("span");
+  form.appendChild(span);
+  const button = document.createElement("button");
+  button.innerText = "Change location";
+  form.appendChild(button);
+  div.appendChild(form);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
@@ -131,6 +140,7 @@ function displayLocation({ country, localtime, name }) {
     const weatherData = await getWeather(newLocation);
     loadingGif.style.display = "none";
     if (weatherData) {
+      span.innerText = "";
       container.innerHTML = null;
       const {
         location: locationData,
@@ -140,15 +150,10 @@ function displayLocation({ country, localtime, name }) {
       container.appendChild(displayLocation(locationData));
       container.appendChild(displayCurrentWeather(current));
       container.appendChild(displayForecast(forecastday));
+    } else {
+      span.innerText = "Location not found";
     }
   });
-  const input = document.createElement("input");
-  input.name = "location";
-  form.appendChild(input);
-  const button = document.createElement("button");
-  button.innerText = "Change location";
-  form.appendChild(button);
-  div.appendChild(form);
 
   const location = document.createElement("p");
   location.innerText = `${name}, ${country}`;
