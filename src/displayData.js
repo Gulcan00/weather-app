@@ -122,7 +122,14 @@ function displayLocation({ country, localtime, name }) {
     e.preventDefault();
     const formData = new FormData(form);
     const newLocation = formData.get("location");
+
+    const loadingGif = document.createElement("img");
+    loadingGif.classList.add("loadingGif");
+    loadingGif.src =
+      "https://media1.giphy.com/media/11ASZtb7vdJagM/giphy.gif?cid=42c22243ltbp7yuptzirwjswr6cju3y7yvkxbg0u516s6h8v&ep=v1_gifs_translate&rid=giphy.gif&ct=g";
+    container.appendChild(loadingGif);
     const weatherData = await getWeather(newLocation);
+    loadingGif.style.display = "none";
     if (weatherData) {
       container.innerHTML = null;
       const {

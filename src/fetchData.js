@@ -16,5 +16,7 @@ export function getWeather(location = "Nicosia") {
 export async function getGif(query) {
   fetch(
     `https://api.giphy.com/v1/gifs/translate?api_key=${GIPHY_API_KEY}&s=${query}`
-  ).then((response) => response.json());
+  )
+    .then((response) => response.json())
+    .then((data) => console.log(data.data.images.original.url));
 }
