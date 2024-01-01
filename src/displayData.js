@@ -21,9 +21,52 @@ function displayCurrentWeather(current) {
   icon.src = current.condition.icon;
   div.appendChild(icon);
 
-  const temp = document.createElement("p");
-  temp.innerText = `${current.temp_c}°C`;
-  div.appendChild(temp);
+  const tempDiv = document.createElement("div");
+  tempDiv.classList.add("switch-temperature");
+  const tempCel = document.createElement("p");
+  tempCel.innerText = `${current.temp_c}`;
+  tempCel.classList.add("celsius");
+  tempDiv.appendChild(tempCel);
+
+  const tempFar = document.createElement("p");
+  tempFar.innerText = `${current.temp_f}`;
+  tempFar.classList.add("fahrenheit");
+  tempDiv.appendChild(tempFar);
+
+  const celBtn = document.createElement("button");
+  const farBtn = document.createElement("button");
+
+  celBtn.innerText = "°C";
+  celBtn.addEventListener("click", () => {
+    celBtn.classList.add("active");
+    farBtn.classList.remove("active");
+    const fahrenheitTemps = document.querySelectorAll(".fahrenheit");
+    fahrenheitTemps.forEach((temp) => {
+      temp.classList.add("hidden");
+    });
+    const celsiusTemps = document.querySelectorAll(".celsius");
+    celsiusTemps.forEach((temp) => {
+      temp.classList.remove("hidden");
+    });
+  });
+  tempDiv.appendChild(celBtn);
+
+  farBtn.innerText = "°F";
+  farBtn.addEventListener("click", () => {
+    celBtn.classList.remove("active");
+    farBtn.classList.add("active");
+    const celsiusTemps = document.querySelectorAll(".celsius");
+    celsiusTemps.forEach((temp) => {
+      temp.classList.add("hidden");
+    });
+    const fahrenheitTemps = document.querySelectorAll(".fahrenheit");
+    fahrenheitTemps.forEach((temp) => {
+      temp.classList.remove("hidden");
+    });
+  });
+  tempDiv.appendChild(farBtn);
+
+  div.appendChild(tempDiv);
 
   const humidity = document.createElement("p");
   humidity.innerText = `${current.humidity}%`;
@@ -41,10 +84,6 @@ function displayLocation({ country, localtime, name }) {
   const div = document.createElement("div");
   div.classList.add("location");
 
-  const location = document.createElement("p");
-  location.innerText = `${name}, ${country}`;
-  div.appendChild(location);
-
   const form = document.createElement("form");
   form.id = "weather-location";
   form.addEventListener("submit", async (e) => {
@@ -54,9 +93,14 @@ function displayLocation({ country, localtime, name }) {
     const weatherData = await getWeather(newLocation);
     if (weatherData) {
       container.innerHTML = null;
-      const { location: locationData, current, forecast } = weatherData;
+      const {
+        location: locationData,
+        current,
+        forecast: { forecastday },
+      } = weatherData;
       container.appendChild(displayLocation(locationData));
       container.appendChild(displayCurrentWeather(current));
+      container.appendChild(displayForecast(forecastday));
     }
   });
   const input = document.createElement("input");
@@ -66,6 +110,10 @@ function displayLocation({ country, localtime, name }) {
   button.innerText = "Change location";
   form.appendChild(button);
   div.appendChild(form);
+
+  const location = document.createElement("p");
+  location.innerText = `${name}, ${country}`;
+  div.appendChild(location);
 
   const dateObj = new Date(localtime);
   const date = document.createElement("p");
