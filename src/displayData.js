@@ -5,9 +5,36 @@ function displayForecast(forecast) {
   div.classList.add("forecast");
   forecast.forEach((day) => {
     const dayDiv = document.createElement("div");
-    const date = document.createElement("p");
-    date.innerText = day.date;
-    dayDiv.appendChild(date);
+    dayDiv.classList.add("forecastDay");
+    const dateP = document.createElement("p");
+    const date = new Date(day.date);
+    const weekday = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    dateP.innerText = weekday[date.getDay()];
+    dayDiv.appendChild(dateP);
+
+    const icon = document.createElement("img");
+    icon.src = day.day.condition.icon;
+    icon.title = day.day.condition.text;
+    dayDiv.appendChild(icon);
+
+    const tempCel = document.createElement("p");
+    tempCel.innerText = `${day.day.avgtemp_c}°C`;
+    tempCel.classList.add("celsius");
+    dayDiv.appendChild(tempCel);
+
+    const tempFah = document.createElement("p");
+    tempFah.innerText = `${day.day.avgtemp_f}°F`;
+    tempFah.classList.add("fahrenheit", "hidden");
+    dayDiv.appendChild(tempFah);
+
     div.appendChild(dayDiv);
   });
   return div;
@@ -22,21 +49,22 @@ function displayCurrentWeather(current) {
   div.appendChild(icon);
 
   const tempDiv = document.createElement("div");
-  tempDiv.classList.add("switch-temperature");
+  tempDiv.classList.add("temperatureContainer");
   const tempCel = document.createElement("p");
   tempCel.innerText = `${current.temp_c}`;
-  tempCel.classList.add("celsius");
+  tempCel.classList.add("celsius", "currentTemp");
   tempDiv.appendChild(tempCel);
 
   const tempFar = document.createElement("p");
   tempFar.innerText = `${current.temp_f}`;
-  tempFar.classList.add("fahrenheit");
+  tempFar.classList.add("fahrenheit", "hidden", "currentTemp");
   tempDiv.appendChild(tempFar);
 
   const celBtn = document.createElement("button");
   const farBtn = document.createElement("button");
 
   celBtn.innerText = "°C";
+  celBtn.classList.add("active");
   celBtn.addEventListener("click", () => {
     celBtn.classList.add("active");
     farBtn.classList.remove("active");
@@ -68,12 +96,16 @@ function displayCurrentWeather(current) {
 
   div.appendChild(tempDiv);
 
+  const condition = document.createElement("p");
+  condition.innerText = current.condition.text;
+  div.appendChild(condition);
+
   const humidity = document.createElement("p");
-  humidity.innerText = `${current.humidity}%`;
+  humidity.innerText = `Humidity: ${current.humidity}%`;
   div.appendChild(humidity);
 
   const wind = document.createElement("p");
-  wind.innerText = `${current.wind_kph} km/h`;
+  wind.innerText = `Wind: ${current.wind_kph} km/h`;
   div.appendChild(wind);
 
   return div;
@@ -117,7 +149,14 @@ function displayLocation({ country, localtime, name }) {
 
   const dateObj = new Date(localtime);
   const date = document.createElement("p");
-  date.innerText = dateObj.toDateString();
+  date.innerText = `${dateObj.getDay().toString().padStart(2, "0")}/${(
+    dateObj.getMonth() + 1
+  )
+    .toString()
+    .padStart(
+      2,
+      "0"
+    )}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
   div.appendChild(date);
 
   return div;
