@@ -44,9 +44,16 @@ function displayCurrentWeather(current) {
   const div = document.createElement("div");
   div.classList.add("current");
 
+  const topPart = document.createElement("div");
+  topPart.style.display = "flex";
+  topPart.style.gap = "8px";
+  topPart.style.alignItems = "center";
+
   const icon = document.createElement("img");
   icon.src = current.condition.icon;
-  div.appendChild(icon);
+  icon.height = 100;
+  icon.width = 100;
+  topPart.appendChild(icon);
 
   const tempDiv = document.createElement("div");
   tempDiv.classList.add("temperatureContainer");
@@ -94,7 +101,8 @@ function displayCurrentWeather(current) {
   });
   tempDiv.appendChild(farBtn);
 
-  div.appendChild(tempDiv);
+  topPart.appendChild(tempDiv);
+  div.appendChild(topPart);
 
   const condition = document.createElement("p");
   condition.innerText = current.condition.text;
@@ -120,12 +128,13 @@ function displayLocation({ country, localtime, name }) {
   form.id = "weather-location";
   const input = document.createElement("input");
   input.name = "location";
+  input.required = true;
   form.appendChild(input);
-  const span = document.createElement("span");
-  form.appendChild(span);
   const button = document.createElement("button");
   button.innerText = "Change location";
   form.appendChild(button);
+  const span = document.createElement("span");
+  form.appendChild(span);
   div.appendChild(form);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -151,6 +160,7 @@ function displayLocation({ country, localtime, name }) {
       container.appendChild(displayCurrentWeather(current));
       container.appendChild(displayForecast(forecastday));
     } else {
+      input.classList.add("error");
       span.innerText = "Location not found";
     }
   });
@@ -165,10 +175,10 @@ function displayLocation({ country, localtime, name }) {
     dateObj.getMonth() + 1
   )
     .toString()
-    .padStart(
-      2,
-      "0"
-    )}/${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`;
+    .padStart(2, "0")}/${dateObj.getFullYear()} ${dateObj
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
   div.appendChild(date);
 
   return div;
