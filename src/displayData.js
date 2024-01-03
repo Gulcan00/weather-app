@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { getWeather } from "./fetchData";
 
 function displayForecast(forecast) {
@@ -8,33 +9,42 @@ function displayForecast(forecast) {
     dayDiv.classList.add("forecastDay");
     const dateP = document.createElement("p");
     const date = new Date(day.date);
-    const weekday = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    dateP.innerText = weekday[date.getDay()];
+    dateP.innerText = format(date, "eeee");
     dayDiv.appendChild(dateP);
 
     const icon = document.createElement("img");
     icon.src = day.day.condition.icon;
     icon.title = day.day.condition.text;
+    icon.height = 80;
+    icon.width = 80;
     dayDiv.appendChild(icon);
 
-    const tempCel = document.createElement("p");
-    tempCel.innerText = `${day.day.avgtemp_c}°C`;
-    tempCel.classList.add("celsius");
-    dayDiv.appendChild(tempCel);
+    const temperature = document.createElement("div");
+    temperature.classList.add("forecastTemperature");
 
-    const tempFah = document.createElement("p");
-    tempFah.innerText = `${day.day.avgtemp_f}°F`;
-    tempFah.classList.add("fahrenheit", "hidden");
-    dayDiv.appendChild(tempFah);
+    const celMax = document.createElement("p");
+    celMax.innerText = `${day.day.maxtemp_c}°C`;
+    celMax.classList.add("celsius");
+    temperature.appendChild(celMax);
 
+    const celMin = document.createElement("p");
+    celMin.style.color = "#d1d5db";
+    celMin.innerText = `${day.day.mintemp_c}°C`;
+    celMin.classList.add("celsius");
+    temperature.appendChild(celMin);
+
+    const fahMax = document.createElement("p");
+    fahMax.innerText = `${day.day.maxtemp_f}°F`;
+    fahMax.classList.add("fahrenheit", "hidden");
+    temperature.appendChild(fahMax);
+
+    const fahMin = document.createElement("p");
+    fahMin.style.color = "#d1d5db";
+    fahMin.innerText = `${day.day.mintemp_f}°F`;
+    fahMin.classList.add("fahrenheit", "hidden");
+    temperature.appendChild(fahMin);
+
+    dayDiv.appendChild(temperature);
     div.appendChild(dayDiv);
   });
   return div;
@@ -67,6 +77,11 @@ function displayCurrentWeather(current) {
   tempFar.classList.add("fahrenheit", "hidden", "currentTemp");
   tempDiv.appendChild(tempFar);
 
+  const btnContainer = document.createElement("div");
+  btnContainer.style.display = "flex";
+  btnContainer.style.alignItems = "center";
+  btnContainer.style.alignSelf = "flex-start";
+
   const celBtn = document.createElement("button");
   const farBtn = document.createElement("button");
 
@@ -84,7 +99,12 @@ function displayCurrentWeather(current) {
       temp.classList.remove("hidden");
     });
   });
-  tempDiv.appendChild(celBtn);
+  btnContainer.appendChild(celBtn);
+
+  const line = document.createElement("div");
+  line.style.borderLeft = "3px solid var(--feldgrau)";
+  line.style.height = "25px";
+  btnContainer.appendChild(line);
 
   farBtn.innerText = "°F";
   farBtn.addEventListener("click", () => {
@@ -99,12 +119,14 @@ function displayCurrentWeather(current) {
       temp.classList.remove("hidden");
     });
   });
-  tempDiv.appendChild(farBtn);
+  btnContainer.appendChild(farBtn);
+  tempDiv.appendChild(btnContainer);
 
   topPart.appendChild(tempDiv);
   div.appendChild(topPart);
 
   const condition = document.createElement("p");
+  condition.style.fontSize = "1.4rem";
   condition.innerText = current.condition.text;
   div.appendChild(condition);
 
@@ -131,7 +153,7 @@ function displayLocation({ country, localtime, name }) {
   input.required = true;
   form.appendChild(input);
   const button = document.createElement("button");
-  button.innerText = "Change location";
+  button.innerText = "Search";
   form.appendChild(button);
   const span = document.createElement("span");
   form.appendChild(span);
@@ -171,14 +193,8 @@ function displayLocation({ country, localtime, name }) {
 
   const dateObj = new Date(localtime);
   const date = document.createElement("p");
-  date.innerText = `${dateObj.getDay().toString().padStart(2, "0")}/${(
-    dateObj.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}/${dateObj.getFullYear()} ${dateObj
-    .getHours()
-    .toString()
-    .padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
+  date.innerText = `${format(dateObj, "eeee, d MMMM, yyyy")}
+    ${format(dateObj, "HH:mm a")}`;
   div.appendChild(date);
 
   return div;

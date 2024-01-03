@@ -17,12 +17,20 @@ body {
 
 #container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 400px 1fr;
   height: 100%;
 }
 
 .location {
   background-color: var(--jet);
+}
+
+.location p:nth-child(2) {
+  font-size: 1.8rem;
+}
+
+.location p:nth-child(3) {
+  font-size: 1.2rem;
 }
 
 .current {
@@ -39,26 +47,38 @@ body {
 .location,
 .current,
 .forecast {
-  padding: 8px 24px;
+  padding: 16px 24px;
 }
 
 button,
 input {
   appearance: none;
   outline: none;
-  border: 1px solid lightgray;
   padding: 8px;
+  border-radius: 6px;
+}
+
+input {
+  border: 1px solid lightgray;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 form {
   display: grid;
-  grid-template-columns: 200px 150px;
+  grid-template-columns: 200px 100px;
   row-gap: 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding-top: 8px;
+  justify-content: center;
 }
 
 form button {
   background-color: var(--spring-green);
   padding: 6px;
+  border: none;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 form span {
@@ -73,8 +93,13 @@ input.error {
   display: none;
 }
 
-.temperatureContainer {
+.temperatureContainer,
+.forecastTemperature {
   display: flex;
+}
+
+.forecastTemperature {
+  gap: 16px;
 }
 
 button {
@@ -92,6 +117,7 @@ button {
 .temperatureContainer button.active {
   font-weight: 600;
   font-size: 1.2em;
+  color: var(--spring-green);
 }
 
 .forecastDay {
@@ -101,7 +127,8 @@ button {
 }
 
 .currentTemp {
-  font-size: 2.4rem;
+  font-size: 4rem;
+  margin: 0px;
 }
 
 .loadingGif {
