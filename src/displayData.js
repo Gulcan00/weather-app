@@ -51,19 +51,21 @@ function displayForecast(forecast) {
 }
 
 function displayCurrentWeather(current) {
-  const div = document.createElement("div");
-  div.classList.add("current");
+  const currentDiv = document.createElement("div");
+  currentDiv.classList.add("current");
 
-  const topPart = document.createElement("div");
-  topPart.style.display = "flex";
-  topPart.style.gap = "8px";
-  topPart.style.alignItems = "center";
+  const div = document.createElement("div");
+
+  const tempAndIcon = document.createElement("div");
+  tempAndIcon.style.display = "flex";
+  tempAndIcon.style.gap = "8px";
+  tempAndIcon.style.alignItems = "center";
 
   const icon = document.createElement("img");
   icon.src = current.condition.icon;
   icon.height = 100;
   icon.width = 100;
-  topPart.appendChild(icon);
+  tempAndIcon.appendChild(icon);
 
   const tempDiv = document.createElement("div");
   tempDiv.classList.add("temperatureContainer");
@@ -122,23 +124,32 @@ function displayCurrentWeather(current) {
   btnContainer.appendChild(farBtn);
   tempDiv.appendChild(btnContainer);
 
-  topPart.appendChild(tempDiv);
-  div.appendChild(topPart);
+  tempAndIcon.appendChild(tempDiv);
+  div.appendChild(tempAndIcon);
 
   const condition = document.createElement("p");
-  condition.style.fontSize = "1.4rem";
+  condition.style.fontSize = "1.6rem";
+  condition.style.margin = 0;
   condition.innerText = current.condition.text;
   div.appendChild(condition);
+  currentDiv.appendChild(div);
 
+  const details = document.createElement("div");
+  details.style.marginTop = "6px";
   const humidity = document.createElement("p");
   humidity.innerText = `Humidity: ${current.humidity}%`;
-  div.appendChild(humidity);
+  details.appendChild(humidity);
 
   const wind = document.createElement("p");
   wind.innerText = `Wind: ${current.wind_kph} km/h`;
-  div.appendChild(wind);
+  details.appendChild(wind);
 
-  return div;
+  const cloud = document.createElement("p");
+  cloud.innerText = `Cloud: ${current.cloud}%`;
+  details.appendChild(cloud);
+  currentDiv.appendChild(details);
+
+  return currentDiv;
 }
 
 function displayLocation({ country, localtime, name }) {
