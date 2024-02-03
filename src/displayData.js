@@ -226,8 +226,7 @@ export default async function displayWeather() {
     current,
     forecast: { forecastday },
   } = await getWeather();
-  console.log(current);
-  console.log(forecastday);
+
   const container = document.getElementById('container');
   container.appendChild(displayLocation(location));
   container.appendChild(displayCurrentWeather(current));
